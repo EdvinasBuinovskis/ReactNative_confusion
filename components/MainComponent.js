@@ -11,6 +11,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent'
 
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
@@ -153,6 +154,26 @@ function ReservationNavigatorScreen() {
     );
 }
 
+const FavoritesNavigator = createStackNavigator();
+
+function FavoritesNavigatorScreen() {
+    return(
+        <FavoritesNavigator.Navigator
+            screenOptions={HeaderOptions}
+        >
+            <FavoritesNavigator.Screen
+                name="My Favorites"
+                component={Favorites}
+                options= {
+                    ({ navigation }) => ({
+                    headerLeft: () => <MenuIcon navigation={navigation}/>
+                    })
+                }
+            />
+        </FavoritesNavigator.Navigator>
+    );
+}
+
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -218,6 +239,15 @@ function MainNavigatorDrawer() {
                 }}
             />
             <MainNavigator.Screen 
+                name="My Favorites" 
+                component={FavoritesNavigatorScreen} 
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <Icon name='heart' type='font-awesome' size={24} color={color}/>
+                    )
+                }}
+            />   
+            <MainNavigator.Screen 
                 name="Reserve Table" 
                 component={ReservationNavigatorScreen} 
                 options={{
@@ -225,7 +255,7 @@ function MainNavigatorDrawer() {
                         <Icon name='cutlery' type='font-awesome' size={24} color={color}/>
                     )
                 }}
-            />            
+            />                 
         </MainNavigator.Navigator>
     );
 }
