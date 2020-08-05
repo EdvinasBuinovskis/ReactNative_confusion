@@ -11,6 +11,9 @@ export const favorites = (state = [], action) => {
         
         case ActionTypes.POST_FAVORITE:
             return {...state, isLoading: true, errMess: null, dishes: []};
+        
+        case ActionTypes.DELETE_FAVORITE:
+            return state.filter((favorite) => favorite !== action.payload);
 
         default: 
             return state;
