@@ -52,10 +52,10 @@ function RenderComments(props) {
                 <Text style={{fontSize: 14}}>{item.comment}</Text>
                 <Text style={{fontSize: 12}}>{item.rating} Stars</Text>
                 <Rating
-                            showRating
-                            rating={item.rating}
-                            style={{margin: 10}}
-                        />
+                    readonly={true}
+                    startingValue={item.rating}
+                    imageSize={10}
+                />
                 <Text style={{fontSize: 12}}>{'-- ' + item.author + ', ' + item.date}</Text>
             </View>
         );
@@ -98,12 +98,6 @@ class Dishdetail extends Component {
         this.props.postFavorite(dishId);
     }
 
-    ratingCompleted = (rating) => {
-        this.setState({
-            rating: rating
-        });
-    }
-
     render() {
         const dishId = this.props.route.params.dishId;
 
@@ -124,9 +118,13 @@ class Dishdetail extends Component {
                 >
                     <View style={styles.formRow}>
                         <Rating
+                            ratingCount={5}
+                            minValue={0}
+                            startingValue={0}
+                            fractions={0}
                             showRating
                             style={{margin: 10}}
-                            onFinishRating={this.ratingCompleted}
+                            onFinishRating={(rating) => this.setState({rating: rating})}
                         />
                     </View> 
                     <View style={styles.formRow}>  
