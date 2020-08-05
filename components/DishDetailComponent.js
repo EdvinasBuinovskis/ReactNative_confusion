@@ -3,7 +3,7 @@ import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal, Flat
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite } from '../redux/ActionCreators';
+import { postFavorite, postComment } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -14,7 +14,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    postFavorite: (dishId) => dispatch(postFavorite(dishId))
+    postFavorite: (dishId) => dispatch(postFavorite(dishId)),
+    postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
 });
 
 function RenderDish(props) {
@@ -50,6 +51,11 @@ function RenderComments(props) {
             <View key={index} style={{margin: 10}}>
                 <Text style={{fontSize: 14}}>{item.comment}</Text>
                 <Text style={{fontSize: 12}}>{item.rating} Stars</Text>
+                <Rating
+                            showRating
+                            rating={item.rating}
+                            style={{margin: 10}}
+                        />
                 <Text style={{fontSize: 12}}>{'-- ' + item.author + ', ' + item.date}</Text>
             </View>
         );
@@ -82,8 +88,9 @@ class Dishdetail extends Component {
         this.setState({ showModal: !this.state.showModal });
     }
 
-    handleComment() {
+    handleComment(dishId) {
         console.log(JSON.stringify(this.state));
+        this.props.postComment(dishId, this.state.rating, this.state.author, this.state.comment)
         this.toggleModal();
     }
 
@@ -91,7 +98,7 @@ class Dishdetail extends Component {
         this.props.postFavorite(dishId);
     }
 
-    ratingCompleted(rating) {
+    ratingCompleted = (rating) => {
         this.setState({
             rating: rating
         });
@@ -138,7 +145,7 @@ class Dishdetail extends Component {
                         <Button
                             title='Submit'
                             color='#512DA8'
-                            onPress={() => this.handleComment()}
+                            onPress={() => this.handleComment(dishId)}
                             accessibilityLabel='Learn more about this purple button'
                         />
                     </View>
