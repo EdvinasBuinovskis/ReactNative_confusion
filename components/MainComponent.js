@@ -12,9 +12,11 @@ import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent'
+import Login from './LoginComponent';
 
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+
 
 const mapStateToProps = state => {
     return {
@@ -174,6 +176,26 @@ function FavoritesNavigatorScreen() {
     );
 }
 
+const LoginNavigator = createStackNavigator();
+
+function LoginNavigatorScreen() {
+    return(
+        <LoginNavigator.Navigator
+            screenOptions={HeaderOptions}
+        >
+            <LoginNavigator.Screen
+                name="Login"
+                component={Login}
+                options= {
+                    ({ navigation }) => ({
+                    headerLeft: () => <MenuIcon navigation={navigation}/>
+                    })
+                }
+            />
+        </LoginNavigator.Navigator>
+    );
+}
+
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -194,6 +216,7 @@ const MainNavigator = createDrawerNavigator();
 
 function MainNavigatorDrawer() {
     return(
+        
         <MainNavigator.Navigator 
             initialRouteName="Home"
             drawerStyle={{
@@ -201,6 +224,16 @@ function MainNavigatorDrawer() {
             }}
             drawerContent={props => <CustomDrawerContentComponent {...props}/>}
         >
+            <MainNavigator.Screen 
+                name="Login" 
+                component={LoginNavigatorScreen} 
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <Icon name='sign-in' type='font-awesome' size={24} color={color}/>
+                    )
+                }}
+
+            />
             <MainNavigator.Screen 
                 name="Home" 
                 component={HomeNavigatorScreen} 
