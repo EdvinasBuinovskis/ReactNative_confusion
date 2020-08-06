@@ -4,7 +4,9 @@ import { Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import * as Animatable from 'react-native-animatable';
-
+import { Notifications } from 'expo'; 
+import * as Permissions from 'expo-permissions';
+ 
 class Reservation extends Component {
 
     constructor(props) {
@@ -38,7 +40,10 @@ class Reservation extends Component {
                 },
                 {
                     text: 'OK',
-                    onPress: () => this.resetForm()
+                    onPress: () => {
+                        this.presentLocalNotification(this.state.date.toISOString());
+                        this.resetForm();
+                    }
                 }
             ],
             { cancelable: false }
@@ -53,6 +58,41 @@ class Reservation extends Component {
             showModal: false,
             show: false,
             mode: 'date'
+        });
+    }
+
+    async obtainNotificationPermission() {
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
+        if ( permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to show notification')
+            }
+        } 
+        else {
+            if (Platform.OS === 'android') {
+                Notifications.createChannelAndroidAsync('notify', {                
+                    name: 'notify',             
+                    sound: true,               
+                    vibrate: true,               
+                });               
+            }
+        }
+        return permission;
+    }
+
+    async presentLocalNotification(date) {
+        await this.obtainNotificationPermission();
+        Notifications.presentLocalNotificationAsync({
+            title: 'Your Reservation',
+            body: 'Reservation for ' + date + ' requested',
+            ios: {
+                sound: true
+            },
+            android: {
+                "channelId": "notify",                
+                color: '#512DA8'               
+            }
         });
     }
 
