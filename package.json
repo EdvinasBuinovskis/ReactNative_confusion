@@ -10,10 +10,12 @@
   "dependencies": {
     "@react-native-community/datetimepicker": "^2.6.1",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/drawer": "^5.9.0",
     "@react-navigation/native": "^5.7.2",
     "@react-navigation/stack": "^5.8.0",
     "expo": "~38.0.8",
+    "expo-image-picker": "~8.3.0",
     "expo-mail-composer": "~8.2.1",
     "expo-permissions": "~9.0.1",
     "expo-secure-store": "~9.0.1",
